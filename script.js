@@ -13,7 +13,12 @@ weatherForm.addEventListener('submit', (event) => {
   const city = cityInput.value;
 
   if(city){
+    try{
 
+    }
+    catch(error){
+      console.error(error);
+    }
   }
   else{
     displayError('Please enter a city name.');
@@ -30,3 +35,4 @@ function displayError(message){
   weatherContainer.style.display = 'flex';
   weatherContainer.appendChild(errorDisplay);
 }
+
