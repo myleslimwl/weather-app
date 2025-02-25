@@ -36,3 +36,7 @@ body{
 .weatherButton:hover{
   background-color: #1c8b4f;
 }
+
+.weatherContainer{
+  background: linear-gradient(to bottom, rgb(136, 205, 252), rgb(242, 198, 115));
+}
