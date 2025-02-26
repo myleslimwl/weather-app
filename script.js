@@ -40,8 +40,40 @@ function displayError(message){
 
 function displayWeatherInfo(data){
 
-  console.log(data);
+  const { name: city, 
+          main: {temp, humidity}, 
+          weather: [{description, id}]} = data;
 
+  weatherContainer.textContent = '';
+  weatherContainer.style.display = 'flex';
+
+  // create elements
+  const cityDisplay = document.createElement('h1');
+  const tempDisplay = document.createElement('p');
+  const humidityDisplay = document.createElement('p');
+  const descDisplay = document.createElement('p');
+  const weatherEmoji = document.createElement('p');
+
+  // obtain text content
+  cityDisplay.textContent = city;
+  tempDisplay.textContent = `${(temp - 273.15).toFixed(1)}°C`;
+  humidityDisplay.textContent = `Humidity: ${humidity}%`;
+  descDisplay.textContent = description;
+  weatherEmoji.textContent = getWeatherEmoji(id);
+
+  // add class
+  cityDisplay.classList.add('cityDisplay');
+  tempDisplay.classList.add('tempDisplay');
+  humidityDisplay.classList.add('humidityDisplay');
+  descDisplay.classList.add('descDisplay');
+  weatherEmoji.classList.add('weatherEmoji');
+
+  // append to display
+  weatherContainer.appendChild(cityDisplay);
+  weatherContainer.appendChild(tempDisplay);
+  weatherContainer.appendChild(humidityDisplay);
+  weatherContainer.appendChild(descDisplay);
+  weatherContainer.appendChild(weatherEmoji);
 }
 
 async function getWeatherData(city){
@@ -54,5 +86,27 @@ async function getWeatherData(city){
     throw new Error("Couldn't fetch weather data. Please try again.");
   }
 
-  return await response.json();
+  const data = await response.json();
+
+  if (data.cod === '404') {
+    throw new Error('City not found. Please enter a valid city name.');
+  }
+
+  return data;
+}
+
+function getWeatherEmoji(weatherId) {
+
+  switch (true){
+    case weatherId >= 200 && weatherId <= 300:
+      return '🌧️';
+    case weatherId >= 500 && weatherId <= 600:
+      return '🌦️';
+    case weatherId >= 700 && weatherId <= 800:
+      return '☁️';
+    case weatherId >= 800:
+      return '🌞';
+    default:
+      return '🌞';
+  }
 }
